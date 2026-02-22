@@ -1,0 +1,35 @@
+client --
+  script key is based on UUID and the key of the update BEE
+  listens for update on designated channel.  returns it's type and position
+    -- update may request that only certain parts of the system respond
+  responds to communication on secure channel
+  performs actions on inventory
+
+bee --
+  scriptable
+  creates list of objects to visit
+  for each object
+     warp to position
+     initiate secure communication
+     turn off scripts in object [this and below my be object specific]
+     send scripts
+     send rest
+     restart scripts
+     
+commands
+    turn off all scripts
+  scripts (remote scripts)
+    delete script
+    ack
+    new script
+    ack
+   notecards,animations,objects (llgiveinventory)
+     delete
+     ack
+     give
+     ack
+
+for (rack|vendor|massage|register|board)
+stop scripts
+(delete|add) (script|notecard|object|animation|texture) <name>
+start scripts

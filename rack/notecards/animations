@@ -1,0 +1,34 @@
+pose|[STAND]|stretch|stretch
+pose|Bench Press|Benchpress|stretch
+pose|Bench Press 1|Benchpress-1|stretch
+pose|Bench Press 2|Benchpress-2|stretch
+pose|Bench Press 3|Benchpress-3|stretch
+pose|Bench Press 4|Benchpress-4|stretch
+pose|Bench Press 5|Benchpress-5|stretch
+pose|Bench Press-STAND|benchsit|stretch
+pose|Curl|Curl|stretch
+pose|Curl 1|Curl-1|stretch
+pose|Curl 2|Curl-2|stretch
+pose|Curl 3|Curl-3|stretch
+pose|Curl 4|Curl-4|stretch
+pose|Curl 5|Curl-5|stretch
+pose|Invert Ups|invertup|invertup-spotter
+pose|Invert Ups 1|invertup-1|invertup-spotter-1
+pose|Invert Ups 2|invertup-2|invertup-spotter-2
+pose|Invert Ups 3|invertup-3|invertup-spotter-3
+pose|Invert Ups 4|invertup-4|invertup-spotter-4
+pose|Invert Ups 5|invertup-5|invertup-spotter-5
+pose|Bench Press-STAND|benchsit|stretch
+pose|Squat|squat|stretch
+pose|Squat 1|squat-1|stretch
+pose|Squat 2|squat-2|stretch
+pose|Squat 3|squat-3|stretch
+pose|Squat 4|squat-4|stretch
+pose|Squat 5|squat-5|stretch
+pose|Squat-STAND|standing|stretch
+pose|Curl-STAND|standing|stretch
+pose|Invert Ups-STAND|standing|stretch
+pose|Bench Press-REST|benchsit|stretch
+pose|Squat-REST|dazed|stretch
+pose|Curl-REST|armstretch|stretch
+pose|Invert Ups-REST|handonwaist|stretch

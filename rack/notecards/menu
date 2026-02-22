@@ -1,0 +1,16 @@
+ROOT|Olympic Power Rack|4|Bench Press|Curl|Squat|Invert Ups|[RESET]
+LEAF|[STAND]|<1.852295, 0.000000, 1.165161><0,0,180>|<-1,0,1.6>
+LEAF|Bench Press|<-0.15, 0.000000, 1.25> |<-1,0,1>
+LEAF|Squat|<-1.3, 0.000000, 1.165161>|<-1.75,0,1.165161>
+LEAF|Curl|<-1.5, 0.000000, 1.165161>|<0.5,0,1.165161><0,0,180>
+LEAF|Invert Ups|<0.66667, 0.000000, 3.5><-90,90,-90>|<1.66667, 0.000000, 1><0,0,180>
+NODE|Seated|Warm-up, workout, or stop?|4|Workout|Re-Weight|New Exercise|[Stand]
+NODE|SpotAvail|Warm-up, workout, or stop?|4|Workout|Re-Weight|New Exercise|Get a spot|[Stand]
+LEAF|Bench Press-REST|<-0.225, 0.000000, 1.15>|<-1,0,1>
+LEAF|Squat-REST|<-3.5, 0.000000, 1.2>|<-1.75,0,1><0,0,270>
+LEAF|Curl-REST|<-0.223229, 0.000000, 1.165161>|<-1,0,1>
+LEAF|Invert Ups-REST|<-0.130646, 0.000000, 1.65><0,0,0>|<-1,0,1>
+LEAF|Bench Press-STAND|<-0.225, 0.000000, 1.15>|<-1,0,1>
+LEAF|Squat-STAND|<-3.5, 0.000000, 1.2>|<-1.75,0,1><0,0,270>
+LEAF|Curl-STAND|<-0.223229, 0.000000, 1.165161>|<-1,0,1>
+LEAF|Invert Ups-STAND|<-0.130646, 0.000000, 1.65><0,0,0>|<-1,0,1>
