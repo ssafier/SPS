@@ -77,6 +77,7 @@
 #define resetWeights 1045
 #define configureBar 1046
 #define incrementLifterPos 1047
+#define savePositions 1048
 
 // bench
 #define FlatBench 2000

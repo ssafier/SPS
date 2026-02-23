@@ -167,7 +167,7 @@ default {
     if ((start_fwd) || (cont_fwd)) {
       offset = <0,0,0.01>;
     } else if ((start_back) || (cont_back)) {
-      offset = <0,0,0.-01>;
+      offset = <0,0,-0.01>;
     } else if ((start_left) || (cont_left)) {
       offset = <0,-0.01,0>;
     } else if ((start_right) || (cont_right)) {

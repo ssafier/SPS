@@ -36,8 +36,6 @@ updateSitTarget(vector pos, rotation rot) {
 
 // -----------------------------------------------
 checkUpdateSitTarget(vector t, rotation r) {
-  debug(t);
-  debug(target);
   if (t != target || r != target_rot) updateSitTarget(target = t, target_rot = r);
 }
 
@@ -48,12 +46,9 @@ initialize() {
   integer objectPrimCount = llGetObjectPrimCount(llGetKey());
   integer currentLinkNumber = 0;
   spotter_link = -1;
-  debug(objectPrimCount);
   while(currentLinkNumber <= objectPrimCount) {
-    debug(currentLinkNumber);
     list params = llGetLinkPrimitiveParams(currentLinkNumber,
 					   [PRIM_NAME, PRIM_DESC]);
-    debug((string) params[0] + " " + (string) params[1]);
     switch((string) params[0]) {
     case "spotter prim": {
       spotter_link = currentLinkNumber;
@@ -72,27 +67,36 @@ initialize() {
 
 // -------------------
 vector getCachedOffset(string a, vector offset) {
+  if (llSubStringIndex(a,"-REST") != -1 ||
+      llSubStringIndex(a,"-STAND") != -1) return offset;
   integer l = llGetListLength(offset_cache);
   integer i;
+  debug(a+ " "+llDumpList2String(offset_cache," "));
   for (i = 0; i < l; i += 2) {
     if (a == (string) offset_cache[i]) {
+      debug(offset_cache[i+1]);
       return (vector)(string) offset_cache[i+1];
     }
   }
+  debug("not found");
   return offset;
 }
 
 // -------------------
 updateCachedOffset(string a, vector offset) {
+  if (llSubStringIndex(a,"-REST") != -1 ||
+      llSubStringIndex(a,"-STAND") != -1) return;
   integer l = llGetListLength(offset_cache);
   integer i;
+  debug("update "+a+" "+(string)offset);
   for (i = 0; i < l; i += 2) {
     if (a == (string) offset_cache[i]) {
-      offset_cache = llListReplaceList(offset_cache, [(string) offset], i+1, i+1);
+      if ((vector)(string)offset_cache[i+1] != offset)
+	offset_cache = llListReplaceList(offset_cache, [(string) offset], i+1, i+1);
       return;
     }
   }
-  offset_cache = [a, offset] + offset_cache;
+  offset_cache = [a, (string) offset] + offset_cache;
 }
 
 // -------------------
@@ -137,6 +141,8 @@ default {
       if (llGetSubString(data,0,0) == "1") {
 	offset_cache = llParseString2List(llGetSubString(data,2,-1),["|", ":"],[]);
       }
+      //      offset_cache = ["Deadlift", (string) ZERO_VECTOR];
+      debug("read "+data+llDumpList2String(offset_cache, " "));
       break;
     }
     default: break;
@@ -149,7 +155,8 @@ default {
 	chan != getPosForEquipment &&
 	chan != returnPosKeepAnim &&
 	chan != returnPosLeaf &&
-	chan != incrementLifterPos) return;
+	chan != incrementLifterPos &&
+	chan != savePositions) return;
     GET_CONTROL;
     switch (chan) {
     case sitLifter: {
@@ -174,11 +181,12 @@ default {
       updateSitTarget(target = target + (vector) o, target_rot);
       break;
     }
-    case returnPosKeepAnim:
     case returnPosLeaf: {
-      debug("return leaf 0");
+      if (cached_animation != "") {
+	debug(cached_animation);
+	updateCachedOffset(cached_animation, offset);
+      }
       string animation;
-      if (cached_animation != "") updateCachedOffset(cached_animation, offset);
       POP(animation);
       if (animation == "[time out]") {
 	animation = "";
@@ -196,15 +204,49 @@ default {
 	spotter_pos = (vector) popper;
 	POP(popper);
 	spotter_rot = (rotation) popper;
-	if (chan == returnPosKeepAnim) {
-	  PUSH(animation);
-	} else {
-	  checkUpdateSitTarget(lifter_pos + offset, lifter_rot);       
-	  debug("|" + (string) spotter_pos + "|" + (string) spotter_rot);
-	  llMessageLinked(spotter_link, positionSitter2,
-			  "|" + (string) spotter_pos + "|" + (string) spotter_rot, xyzzy);
-	}
+	offset = getCachedOffset(animation, offset);
+	checkUpdateSitTarget(lifter_pos + offset, lifter_rot);       
+	//	  debug("|" + (string) spotter_pos + "|" + (string) spotter_rot);
+	llMessageLinked(spotter_link, positionSitter2,
+			"|" + (string) spotter_pos + "|" + (string) spotter_rot, xyzzy);
       }
+      break;
+    }
+    case returnPosKeepAnim: {
+      string animation;
+      POP(animation);
+      if (animation == "[time out]") {
+	animation = "";
+	PUSH("[RESET]");
+      } else if (animation == "STRING") {
+	animation = "";
+      } else {
+	string popper;
+	POP(popper);
+	lifter_pos = (vector) popper;
+	POP(popper);
+	lifter_rot = (rotation) popper;
+	POP(popper);
+	spotter_pos = (vector) popper;
+	POP(popper);
+	spotter_rot = (rotation) popper;
+	PUSH(animation);
+      }
+      break;
+    }
+    case savePositions: {
+      if (cached_animation != "") updateCachedOffset(cached_animation, offset);
+      cached_animation = "";
+      if (offset_cache == []) return;
+      integer l = llGetListLength(offset_cache);
+      integer i;
+      list out = [];
+      for (i = 0; i < l; i += 2) {
+	out += [(string) offset_cache[i] + ":" + (string) offset_cache[i+1]];
+      }
+      debug("save "+ llDumpList2String(out,"|"));
+      llUpdateKeyValue((string) xyzzy + "+RACK", llDumpList2String(out,"|"), 0, "");
+      offset_cache = [];
       break;
     }
     default: break;

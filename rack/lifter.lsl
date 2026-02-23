@@ -40,6 +40,7 @@ integer fromNode(string node, string data) {
 reset() {
   if (weight_set != NULL_KEY) llShout(channel, "die");
   weight_set = NULL_KEY;
+  if (lifter != NULL_KEY) llMessageLinked(LINK_THIS, savePositions, "|", lifter);
   llMessageLinked(LINK_SET, ClearLifter, "", NULL_KEY);
   llMessageLinked(LINK_THIS, setupRack, "|[RESET]", NULL_KEY);
   llMessageLinked(LINK_THIS, WorkoutReset, "", NULL_KEY);
