@@ -51,6 +51,7 @@ default {
 		      doMenu,
 		      (string) transferSML + "|To transfer SML strength to SPS, wear the SML training HUD and click YES|Yes+No",
 		      lifter);
+      llRegionSayTo(lifter,0,"Join the SML Group Chat: secondlife:///app/group/b84aebe8-3b90-00fa-e467-56a2e33b6a82/about");
       return;
     }
     strength = 500;
