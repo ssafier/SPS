@@ -2,6 +2,11 @@
 integer channel;
 integer handle;
 vector origin;
+
+key data_key;
+key lifter;
+string animation;
+integer update_offset;
 vector offset;
 rotation lrot;
 
@@ -19,6 +24,9 @@ default {
     integer weight = (integer) (string) params[3];
     offset = (vector)(string)params[4];
     lrot = (rotation)(string)params[5];
+    update_offset = FALSE;
+    lifter = NULL_KEY;
+    animation = "";
     
     llSetScale(<diameter, diameter, length>);
     origin = llGetPos();
@@ -35,10 +43,17 @@ default {
   listen(integer chan, string name, key xyzzy, string msg) {
     list message = llParseString2List(msg, ["|"],[]);
     switch((string) message[0]) {
+    case "move" : {
+      update_offset = TRUE;
+      vector v = (vector)(string)message[1];
+      offset += v;
+      llSetLinkPrimitiveParamsFast(LINK_THIS, [PRIM_POS_LOCAL, llGetLocalPos() + v]);
+      break;
+    }
     case "attach": {
       integer i;
       integer linkCount = llGetNumberOfPrims();
-
+      animation = (string) message[1];
       // Get and store all child prim local positions and rotations
       for (i=2; i<=linkCount; i++)  {
 	list x = llGetLinkPrimitiveParams(i,
@@ -52,19 +67,39 @@ default {
       break;
     }
     case "detach": {
+      if (update_offset && lifter != NULL_KEY) {
+	llUpdateKeyValue((string) lifter + "+" + animation + "+BAR", (string) offset,
+			 FALSE, "");
+      }
       llDetachFromAvatar();
       break;
     }
     case "die": {
-      if (llGetAttached()) llDetachFromAvatar();
+      if (llGetAttached()) {
+	if (update_offset && lifter != NULL_KEY) {
+	  llUpdateKeyValue((string) lifter + "+" + animation + "+BAR", (string) offset,
+			   FALSE, "");
+	}
+	llDetachFromAvatar();
+      }
       llDie();
       break;
     }
     default: break;
     }
   }
-  experience_permissions(key lifter) {
-    llAttachToAvatarTemp(ATTACH_RHAND);
+  experience_permissions(key avi) {
+    lifter = avi;
+    data_key = llReadKeyValue((string) lifter + "+" + animation + "+BAR");
+  }
+  dataserver(key k, string data) {
+    if (k == data_key) {
+      data_key = NULL_KEY;
+      if (llGetSubString(data,0,0) == "1") {
+	offset = (vector) llGetSubString(data,2,-1);
+      }
+      llAttachToAvatarTemp(ATTACH_RHAND);
+    }
   }
   attach(key id) {
     if (id) {

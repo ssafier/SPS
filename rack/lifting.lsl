@@ -8,6 +8,8 @@
 key lifter;
 integer lifter_link;
 
+integer bar_channel;
+
 integer rtf;
 float orm_percent;
 integer rep;
@@ -59,6 +61,8 @@ default {
       orm_percent = (float) p;
       POP(p);
       lifter_link = (integer) p;
+      POP(p);
+      bar_channel = (integer) p;
       terminal = FALSE;
       // NOTE: when rep is 1, getRep should calculate RIR
       // start base animation
@@ -111,6 +115,7 @@ default {
     llRegionSayTo(avi, 0,"Use arrows to pose, PAGE UP to stop workout.");
     llTakeControls(
 		   CONTROL_UP | CONTROL_DOWN |
+		   CONTROL_ROT_LEFT | CONTROL_ROT_RIGHT |
 		   CONTROL_LEFT | CONTROL_RIGHT |
 		   CONTROL_FWD | CONTROL_BACK,
 		   TRUE, FALSE);
@@ -164,17 +169,25 @@ default {
       return;
     }
     vector offset = ZERO_VECTOR;
+    vector bar_offset = ZERO_VECTOR;
     if ((start_fwd) || (cont_fwd)) {
       offset = <0,0,0.01>;
     } else if ((start_back) || (cont_back)) {
       offset = <0,0,-0.01>;
     } else if ((start_left) || (cont_left)) {
-      offset = <0,-0.01,0>;
+      bar_offset = <0,-0.01,0>;
     } else if ((start_right) || (cont_right)) {
-      offset = <0,0.01,0>;
+      bar_offset = <0,0.01,0>;
+    } else if ((start_rot_left) || (cont_rot_left)) {
+      bar_offset = <-0.01,0,0>;
+    } else if ((start_rot_right) || (cont_rot_right)) {
+      bar_offset = <0.01,0,0>;
     }
     if (offset != ZERO_VECTOR) {
       llMessageLinked(LINK_THIS,incrementLifterPos, "|" + (string) offset, lifter);
+    }
+    if (bar_offset != ZERO_VECTOR) {
+      llSay(bar_channel,"move|"+(string)bar_offset);
     }
   }
   

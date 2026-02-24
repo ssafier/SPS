@@ -73,7 +73,7 @@ displayMenu(string s) {
   switch(s) {
   case "Workout": {
     llListenControl(handle, TRUE);
-    llSay(channel,"attach|"+(string) lifter); // control passed through listen event
+    llSay(channel,"attach|"+(string) lifter + "|" + animation); // control passed through listen event
     break;
   }
   case "New Exercise": {
@@ -290,8 +290,9 @@ state workout {
 // attach bar and start lifting
 state lifting {
   state_entry() {
+    integer bar_channel = channel;
     llMessageLinked(LINK_THIS, Lifting,
-		    "|" + animation + "|" + (string) current_rtf + "|" + (string) current_percent + "|" + (string) lifter_link,
+		    "|" + animation + "|" + (string) current_rtf + "|" + (string) current_percent + "|" + (string) lifter_link + "|" + (string) bar_channel,
 		    lifter);
   }
   changed(integer f) {
@@ -455,7 +456,7 @@ state resting {
     }
     if (start_down) {
       llListenControl(handle, TRUE);
-      llSay(channel,"attach|"+(string) lifter);
+      llSay(channel,"attach|"+(string) lifter + "|" + animation);
     }
   }
   
