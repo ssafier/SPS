@@ -1,34 +1,42 @@
 pose|[STAND]|stretch|stretch
 pose|Bench Press|Benchpress|stretch
-pose|Bench Press 1|Benchpress-1|stretch
-pose|Bench Press 2|Benchpress-2|stretch
-pose|Bench Press 3|Benchpress-3|stretch
-pose|Bench Press 4|Benchpress-4|stretch
-pose|Bench Press 5|Benchpress-5|stretch
+pose|Bench Press 1|Benchpress-1~003303310000000:1.25+113303320000000:1.75|stretch
+pose|Bench Press 2|Benchpress-2~003303310000000:1.75+113303320000000:2.25|stretch
+pose|Bench Press 3|Benchpress-3~003303310000000:1.75+113303320000000:2.25|stretch
+pose|Bench Press 4|Benchpress-4~003303310000000:2.5+113303320000000:2|stretch
+pose|Bench Press 5|Benchpress-5~113303320000000:4.5|stretch
 pose|Bench Press-STAND|benchsit|stretch
-pose|Curl|Curl|stretch
-pose|Curl 1|Curl-1|stretch
-pose|Curl 2|Curl-2|stretch
-pose|Curl 3|Curl-3|stretch
-pose|Curl 4|Curl-4|stretch
-pose|Curl 5|Curl-5|stretch
+pose|Curl|Curl|Curlspot
+pose|Curl 1|Curl-1~330010010000000:1.25+330010010000000:1.75|Curlspot-1
+pose|Curl 2|Curl-2~330010010000000:1.75+330010010000000:2.25|Curlspot-2
+pose|Curl 3|Curl-3~331110010000000:1.75+330010010000000:2.25|Curlspot-3
+pose|Curl 4|Curl-4~331120010000000:2.5+330010010000000:2|Curlspot-4
+pose|Curl 5|Curl-5~330031130000000:4.5|Curlspot-5
+pose|Deadlift|deadlift|Curlspot
+pose|Deadlift 1|deadlift-1~110030012332211:1.25+111130013333322:1.75|Curlspot-1
+pose|Deadlift 2|deadlift-2~110030012332211:1.75+111130013333322:2.25|Curlspot-2
+pose|Deadlift 3|deadlift-3~110030012332211:2.5+111130013333322:1.5|Curlspot-3
+pose|Deadlift 4|deadlift-4~110030012332211:1.5+111130013333322:3|Curlspot-4
+pose|Deadlift 5|deadlift-5~111130013333322:4.5|Curlspot-5
 pose|Invert Ups|invertup|invertup-spotter
-pose|Invert Ups 1|invertup-1|invertup-spotter-1
-pose|Invert Ups 2|invertup-2|invertup-spotter-2
-pose|Invert Ups 3|invertup-3|invertup-spotter-3
-pose|Invert Ups 4|invertup-4|invertup-spotter-4
-pose|Invert Ups 5|invertup-5|invertup-spotter-5
+pose|Invert Ups 1|invertup-1~220030031220022:1.25+221120031330022:1.75|invertup-spotter-1
+pose|Invert Ups 2|invertup-2~220030031220022:1.75+221120031330022:2.25|invertup-spotter-2
+pose|Invert Ups 3|invertup-3~220030031220022:2.5+221120031330022:1.5|invertup-spotter-3
+pose|Invert Ups 4|invertup-4~220030031220022:2.5+221120031330022:2invertup-spotter-4
+pose|Invert Ups 5|invertup-5~221120031330022:4.5|invertup-spotter-5
 pose|Bench Press-STAND|benchsit|stretch
-pose|Squat|squat|stretch
-pose|Squat 1|squat-1|stretch
-pose|Squat 2|squat-2|stretch
-pose|Squat 3|squat-3|stretch
-pose|Squat 4|squat-4|stretch
-pose|Squat 5|squat-5|stretch
+pose|Squat|squat|squatspot
+pose|Squat 1|squat-1~111100030223311:1.25+111120030333333:1.75|squatspot-1
+pose|Squat 2|squat-2~111100030223311:1.75+111120030333333:2.25|squatspot-2
+pose|Squat 3|squat-3~111100030223311:1.75+111120030333333:2.25|squatspot-3
+pose|Squat 4|squat-4~111120030223311:2.5+111130030333333:2|squatspot-4
+pose|Squat 5|squat-5~111130030333333:4.5|squatspot-5
 pose|Squat-STAND|standing|stretch
 pose|Curl-STAND|standing|stretch
+pose|Deadlift-STAND|standing|stretch
 pose|Invert Ups-STAND|standing|stretch
 pose|Bench Press-REST|benchsit|stretch
 pose|Squat-REST|dazed|stretch
 pose|Curl-REST|armstretch|stretch
+pose|Deadlift-REST|armstretch|stretch
 pose|Invert Ups-REST|handonwaist|stretch

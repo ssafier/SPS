@@ -1,5 +1,9 @@
 #include "include/sps.h"
 
+#ifndef debug
+#define debug(x)
+#endif
+
 // Script to send an flex animationstring to a dev or muscle devness avatar
 
 #define FLEX_CHANNEL 1000
@@ -17,7 +21,10 @@ key dev_avatar;
 
 string devFlexString(string encoding) {
   integer len = llStringLength(encoding);
-  if (llStringLength(encoding) != 15) return cOffString;
+  if (llStringLength(encoding) != 15) {
+    debug(encoding + " is not 15");
+    return cOffString;
+  }
   integer i;
   string out = (string) dev_avatar;
   for (i = 0; i < 15; ++i) {
