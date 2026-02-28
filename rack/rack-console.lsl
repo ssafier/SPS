@@ -71,12 +71,18 @@ default {
 	if (workout == "[RESET]" || workout == "[time out]") {
 	  llMessageLinked(LINK_THIS, ResetEquipment, "", NULL_KEY);
 	  llMessageLinked(LINK_THIS, 0," ", "fw_data: Weight");
-	  llSetLinkPrimitiveParamsFast(display_link, [PRIM_TEXTURE, 0, "setup", <1,1,0>,ZERO_VECTOR,0]);
+	  llSetLinkPrimitiveParamsFast(display_link,
+				       [PRIM_TEXTURE, 0, "setup", <1,1,0>,ZERO_VECTOR,0,
+					PRIM_NORMAL, 1, "setup-norm", <1,1,0>,ZERO_VECTOR,0,
+					PRIM_SPECULAR, 1, "setup-spec", <1,1,0>,ZERO_VECTOR,0, <1,0.5,0>, 60, 15]);
 	  llMessageLinked(LINK_THIS, 0,"", "fw_data: Weight");
 	  return;
 	}
 	PUSH(workout);
-	llSetLinkPrimitiveParamsFast(display_link, [PRIM_TEXTURE, 0, "-"+workout, <1,1,0>,ZERO_VECTOR,0]);
+	llSetLinkPrimitiveParamsFast(display_link,
+				     [PRIM_TEXTURE, 0, "-"+workout, <1,1,0>,ZERO_VECTOR,0,
+				      PRIM_NORMAL, 1, "-" + workout + "-norm", <1,1,0>,ZERO_VECTOR,0,
+				      PRIM_SPECULAR, 1, "-" + workout + "-spec", <1,1,0>,ZERO_VECTOR,0, <1,0.5,0>, 60, 15]);
 	debug((string)next);
 	NEXT_STATE;
 	break;

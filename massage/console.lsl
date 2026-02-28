@@ -50,7 +50,7 @@ default {
       if (!has_trainers && !inUse) {
 	llSetLinkPrimitiveParamsFast(display_link,
 				     [PRIM_TEXTURE, 0,"console-a", <1,1,0>,ZERO_VECTOR,0,
-				      PRIM_NORMAL, 0, "console-a- norm", <1,1,0>,ZERO_VECTOR,0,
+				      PRIM_NORMAL, 0, "console-a-norm", <1,1,0>,ZERO_VECTOR,0,
 				      PRIM_SPECULAR, 0, "console-a-spec", <1,1,0>,ZERO_VECTOR,0, <1,0.5,0>, 60, 15]);
       }
       has_trainers = TRUE;
@@ -60,7 +60,7 @@ default {
       if (has_trainers && !inUse) {
 	llSetLinkPrimitiveParamsFast(display_link,
 				     [PRIM_TEXTURE, 0,"console-nt", <1,1,0>,ZERO_VECTOR,0,
-				      PRIM_NORMAL, 0, "console-nt- norm", <1,1,0>,ZERO_VECTOR,0,
+				      PRIM_NORMAL, 0, "console-nt-norm", <1,1,0>,ZERO_VECTOR,0,
 				      PRIM_SPECULAR, 0, "console-nt-spec", <1,1,0>,ZERO_VECTOR,0, <1,0.5,0>, 60, 15]);
       }
       has_trainers = FALSE;
@@ -72,7 +72,7 @@ default {
       inUse = TRUE;
 	llSetLinkPrimitiveParamsFast(display_link,
 				     [PRIM_TEXTURE, 0,"console-iu", <1,1,0>,ZERO_VECTOR,0,
-				      PRIM_NORMAL, 0, "console-iu- norm", <1,1,0>,ZERO_VECTOR,0,
+				      PRIM_NORMAL, 0, "console-iu-norm", <1,1,0>,ZERO_VECTOR,0,
 				      PRIM_SPECULAR, 0, "console-iu-spec", <1,1,0>,ZERO_VECTOR,0, <1,0.5,0>, 60, 15]);
       break;
     }
@@ -82,12 +82,12 @@ default {
       if (has_trainers) {
 	llSetLinkPrimitiveParamsFast(display_link,
 				     [PRIM_TEXTURE, 0,"console-a", <1,1,0>,ZERO_VECTOR,0,
-				      PRIM_NORMAL, 0, "console-a- norm", <1,1,0>,ZERO_VECTOR,0,
+				      PRIM_NORMAL, 0, "console-a-norm", <1,1,0>,ZERO_VECTOR,0,
 				      PRIM_SPECULAR, 0, "console-a-spec", <1,1,0>,ZERO_VECTOR,0, <1,0.5,0>, 60, 15]);
       } else {
 	llSetLinkPrimitiveParamsFast(display_link,
 				     [PRIM_TEXTURE, 0,"console-nt", <1,1,0>,ZERO_VECTOR,0,
-				      PRIM_NORMAL, 0, "console-nt- norm", <1,1,0>,ZERO_VECTOR,0,
+				      PRIM_NORMAL, 0, "console-nt-norm", <1,1,0>,ZERO_VECTOR,0,
 				      PRIM_SPECULAR, 0, "console-nt-spec", <1,1,0>,ZERO_VECTOR,0, <1,0.5,0>, 60, 15]);
       }
       llResetOtherScript(".masseur");
