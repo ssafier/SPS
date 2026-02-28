@@ -4,6 +4,8 @@ integer handle;
 vector origin;
 
 key data_key;
+key die_key;
+
 key lifter;
 string animation;
 integer update_offset;
@@ -77,10 +79,11 @@ default {
     case "die": {
       if (llGetAttached()) {
 	if (update_offset && lifter != NULL_KEY) {
-	  llUpdateKeyValue((string) lifter + "+" + animation + "+BAR", (string) offset,
-			   FALSE, "");
+	  die_key = llUpdateKeyValue((string) lifter + "+" + animation + "+BAR", (string) offset,
+				     FALSE, "");
+	} else {
+	  llDetachFromAvatar();	
 	}
-	llDetachFromAvatar();
       }
       llDie();
       break;
@@ -90,17 +93,28 @@ default {
   }
   experience_permissions(key avi) {
     lifter = avi;
+    die_key = NULL_KEY;
     data_key = llReadKeyValue((string) lifter + "+" + animation + "+BAR");
   }
+  
   dataserver(key k, string data) {
-    if (k == data_key) {
+    switch(k) {
+    case data_key: {
       data_key = NULL_KEY;
       if (llGetSubString(data,0,0) == "1") {
 	offset = (vector) llGetSubString(data,2,-1);
       }
       llAttachToAvatarTemp(ATTACH_RHAND);
+      break;
+    }
+    case die_key: {
+      llDetachFromAvatar();
+      break;
+    }
+    default: break;
     }
   }
+  
   attach(key id) {
     if (id) {
       llSetLinkPrimitiveParamsFast(LINK_THIS,
