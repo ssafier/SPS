@@ -48,10 +48,16 @@ default {
     case resetTable: {
       if (has_trainers) {
 	llSetText("Trainer available.\nClick for a massage.", <0,1,1>,1);
-	llMessageLinked(LINK_ROOT, 0, "Available", "fw_data:Status");
+	llSetLinkPrimitiveParamsFast(LINK_THIS,
+				     [PRIM_TEXTURE, 0,"console-a", <1,1,0>,ZERO_VECTOR,0,
+				      PRIM_NORMAL, 0, "console-a- norm", <1,1,0>,ZERO_VECTOR,0,
+				      PRIM_SPECULAR, 0, "console-a-spec", <1,1,0>,ZERO_VECTOR,0, <1,0.5,0>, 60, 15]);
       } else {
 	llSetText("No trainers.", <0,1,1>,1);
-	llMessageLinked(LINK_ROOT, 0, "No Trainers", "fw_data:Status");
+	llSetLinkPrimitiveParamsFast(LINK_THIS,
+				     [PRIM_TEXTURE, 0,"console-nt", <1,1,0>,ZERO_VECTOR,0,
+				      PRIM_NORMAL, 0, "console-nt- norm", <1,1,0>,ZERO_VECTOR,0,
+				      PRIM_SPECULAR, 0, "console-nt-spec", <1,1,0>,ZERO_VECTOR,0, <1,0.5,0>, 60, 15]);
       }
       inUse = FALSE;
       break;
