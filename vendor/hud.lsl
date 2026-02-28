@@ -46,7 +46,6 @@ default {
     if (h != handle) return;
     handle = NULL_KEY;
     if (llGetSubString(data,0,0) == "0") {
-      llCreateKeyValue((string) lifter, VERSION);
       llMessageLinked(LINK_THIS,
 		      doMenu,
 		      (string) transferSML + "|To transfer SML strength to SPS, wear the SML training HUD and click YES|Yes+No",
@@ -110,6 +109,7 @@ state get_sml {
 #define makeJSON(str, xp) "{ \"xp\": "+(string) (xp) +", "+ "\"strength\":"+ (string) (str) + "}"
 state give_hud {
   state_entry() {
+    llUpdateKeyValue((string) lifter, VERSION, FALSE, "");
     float arms = ((float) strength) * 0.05;
     float armsRest = arms - (integer) arms;
     float chest =  ((float) strength) * 0.20;
