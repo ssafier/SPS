@@ -154,7 +154,7 @@ default {
       if (trainers == []) llListenControl(handle,FALSE);
       break;
     }
-    case "end-yoga-class" {
+    case "end-yoga-class": {
       yoga_class_channel = 0;
       // pass thru
     }
