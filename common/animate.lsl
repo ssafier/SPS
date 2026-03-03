@@ -29,6 +29,7 @@ reset() {
 
 // ----------------------
 animate(key agent) {
+  if (current_avatar == NULL_KEY) return;
   if (flags & afStopAll) {
     stopAllAnims(agent);
   }
