@@ -134,6 +134,7 @@ default {
     case selectWeight: {
       string m;
       POP(m);
+      llMessageLinked(LINK_THIS, 0, m, "fw_data: Weight");
       integer idx = llListFindList(weights, [m]);
       if (idx == -1) return;
       // spotter bonus

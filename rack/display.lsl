@@ -7,10 +7,9 @@
 #define READY_MSG "Touch to configure and workout.\nSPS HUD required."
 default
 {
-  state_entry()
-    {
+  state_entry() {
       llSetText(READY_MSG,COLOR,1);
-    }
+  }
   link_message(integer from, integer chan, string msg, key xyzzy) {
     switch(chan) {
     case InUse: {

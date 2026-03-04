@@ -61,7 +61,6 @@ initialize() {
 
 barAndWeightsRezzedImpl(string weight) {
   debug("bar "+msg);
-  llMessageLinked(LINK_THIS, 0, weight, "fw_data: Weight");
   if (handle) llListenRemove(handle);
   handle = llListen(channel,"bar",NULL_KEY,"");
   llListenControl(handle, FALSE);
@@ -153,7 +152,6 @@ default {
       POP(popper); current_rtf = (integer) popper;
       string weight;  POP(weight); // weight;
       POP(popper); weight_set = (key) popper;
-      llMessageLinked(LINK_THIS, 0, weight+" KG", "fw_data: Weight");
       llSay(channel, "die");
       weight_set = NULL_KEY;
       break;
