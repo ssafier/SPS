@@ -31,6 +31,7 @@ default {
     channel = (integer)("0x"+llGetSubString((string) llGetKey(), -5,-1));
     responses = [];
     llSetClickAction(CLICK_ACTION_TOUCH);
+    llSetText("Click to update SPS Equipment.",<1,1,0>,1);
     llSay(0, "Touch to update SPS equipment.");
   }
   
