@@ -1,3 +1,4 @@
+// Script to turn off other scripts, then deletes itself.
 default {
   state_entry() {
     integer i;
