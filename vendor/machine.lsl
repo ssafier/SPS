@@ -44,6 +44,13 @@ initialize() {
 #define prevSup() if ((supIndex = supIndex - stride) < 0) supIndex = cItemLen - stride
 #define displaySup() llSetLinkPrimitiveParamsFast(LINK_THIS, [PRIM_TEXTURE, 1,(string) items[supIndex+supTexture], <1,1,0>,ZERO_VECTOR,0, PRIM_NORMAL, 1,(string) items[supIndex+supTexture]+"-norm", <1,1,0>,ZERO_VECTOR,0, PRIM_SPECULAR, 1, (string) items[supIndex+supTexture]+"-spec", <1,1,0>,ZERO_VECTOR,0, <1,0.5,0>, 60, 15]);
 
+instructions() {
+  llSay(0, "Thanks for exploring the SPS Vending System, where all");
+  llSay(0, "SPS products (and the HUD) reside!");
+  llSay(0, "Touch the arrows to advance to the next/previous item.");
+  llSay(0, "Touch the BUY button to get the item.");
+}
+
 default {
   on_rez(integer x) {
     initialize();
@@ -68,8 +75,8 @@ default {
   
   touch_start(integer x) {
     vector point = llDetectedTouchUV(0);
-    if (point.x < 0.398 || point.x > 0.443) return;
-    if (point.y < 0.548 || point.y > 0.577) return;
+    if (point.x < 0.398 || point.x > 0.443) { instructions(); return; }
+    if (point.y < 0.548 || point.y > 0.577) { instructions(); return; }
 
     if (point.x < 0.415) {
       llSetTimerEvent(0);
@@ -85,7 +92,9 @@ default {
       if (point.y < 0.559) { prevSup(); } else { nextSup(); }
       displaySup();
       llSetTimerEvent(userTime);
-      }
+    } else {
+      instructions();
+    }
   }
 
   experience_permissions(key avi) {

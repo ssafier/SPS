@@ -112,6 +112,7 @@ default {
   }
   
   experience_permissions(key avi) {
+    cache = TRUE;
     llRegionSayTo(avi, 0,"Use up/down/left/right arrows to pose, rotate left/right to adjust bar position and PAGE UP to stop workout.");
     llTakeControls(
 		   CONTROL_UP | CONTROL_DOWN |
