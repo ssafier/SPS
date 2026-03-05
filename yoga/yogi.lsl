@@ -69,7 +69,11 @@ default {
   listen(integer chan, string name, key xyzzy, string msg) {
     llSetTimerEvent(0);
     llListenControl(handle, FALSE);
-    if (msg == "Yes") llMessageLinked(LINK_THIS, Yoga, "", yogi);
+    if (msg == "Yes") {
+      llMessageLinked(LINK_THIS, Yoga, "", yogi);
+    } else {
+      yogi = NULL_KEY;
+    }
   }
 
   timer() {

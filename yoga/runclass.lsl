@@ -46,8 +46,6 @@ rotation target_rot;
 key request_key;
 integer offset_dist = 1; // 5, 10, 25
 
-integer channel;
-integer handle;
 integer yoga_channel;
 #define SayToHud(x) if (yoga_channel != 0) llSay(yoga_channel, (string)(x))
 
@@ -295,13 +293,13 @@ default {
     
     llMessageLinked(LINK_THIS, StartLog, "", NULL_KEY);
     yoga_channel = (integer)("0x"+ llGetSubString((string) yogi, -8, -1));
-    SayToHud("yoga|1");
 
     sitting = TRUE;
     llRegionSayTo(yogi,0,"Use  arrows to adjust position.  Touch the mat for menu.");
     start_time = llGetTime();
     llShout(0, llGetDisplayName(yogi)+" is teaching a yoga class.");
     llSetTimerEvent(CLOCK);
+    SayToHud("yoga|1");
   }
 
   experience_permissions_denied(key avi, integer reason) {
