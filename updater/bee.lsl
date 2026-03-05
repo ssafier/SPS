@@ -35,17 +35,17 @@ default {
   }
   timer() {
     llSetTimerEvent(0);
-    llSay(0,"timer");
     integer l = llGetListLength(responses);
+    llSay(0,"timer "+(string) l);
     integer i;
     equipment = [];
-    for (i = 0; i < l; ++i) {
+    for (i = 0; i < l; ++i) { 
       list r = llParseString2List((string) responses[i], ["|"],[]);
       if (llListFindList(equipment,[(vector)(string)r[2]]) == -1) {
 	equipment += [(string) r[0], (float)(string) r[1], (vector)(string) r[2], (key)(string)r[3]];
       }
     }
-    equipment = filter(PowerRack, 0.2);
+    equipment = filter(PowerRack, 0.6); // number is THIS version
     llSay(0, llDumpList2String(equipment," "));
   }
 }

@@ -247,3 +247,7 @@
 #define animateClass 408
 #define saveClass 409
 #define incrementClassPay 410
+
+// Updater
+#define flyBee 500
+
