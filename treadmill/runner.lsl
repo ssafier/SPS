@@ -1,5 +1,5 @@
 #include "include/controlstack.h"
-#include "evolve/sps.h"
+#include "include/sps.h"
 
 #ifndef debug
 #define debug(x)
