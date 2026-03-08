@@ -197,6 +197,12 @@
 #define GEAR_OFF 253
 #define GEAR_SPEED 254
 
+// wheel for cycle (dupe!)
+#define WHEEL_ON 252
+#define WHEEL_OFF 253
+#define WHEEL_SPEED 254
+
+
 // Treadmill
 #define SetSpeedAnimation 256
 #define SetTreadmill 257

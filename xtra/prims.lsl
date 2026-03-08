@@ -15,10 +15,21 @@ default {
       }
       integer n = (integer) desc;
       switch((string) params[0]) {
+#ifdef RACK
       case "bench base":
       case "bp incline back":
       case "bp incline seat":
       case "horizontal support": {
+#endif
+#ifdef CYCLE
+      case "PedalGear":
+      case "Seat":
+      case "tri left":
+      case "tri right":
+      case "bars":
+      case "frame":
+      case "front wheel": {
+#endif
 	llSetLinkPrimitiveParamsFast(currentLinkNumber,
 				     [PRIM_DESC,
 				      desc + "+" +
@@ -26,6 +37,7 @@ default {
 				      (string)(rotation)params[3]]);
 	break;
       }
+#ifdef RACK
       case "holder":
       case "Rack":
       case "rack side": 
@@ -38,6 +50,7 @@ default {
 				      (string)(vector)params[4]]);
 	break;
       }
+#endif
       default: break;
       }
       ++currentLinkNumber;
