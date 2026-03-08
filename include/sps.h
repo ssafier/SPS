@@ -201,7 +201,7 @@
 #define WHEEL_ON 252
 #define WHEEL_OFF 253
 #define WHEEL_SPEED 254
-
+#define SetCycle 257
 
 // Treadmill
 #define SetSpeedAnimation 256
