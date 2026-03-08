@@ -1,5 +1,5 @@
-#include "controlstack.h"
-#include "evolve/sps.h"
+#include "include/controlstack.h"
+#include "include/sps.h"
 
 #define NOTECARD_NAME ".equipment"
 
