@@ -23,7 +23,6 @@ integer speed;
 float meters_per_second;
 integer resistance;
 float resistance_inverse_percent;
-integer roller;
 
 float start_time;
 float exercise_start_time;
@@ -48,20 +47,6 @@ GLOBAL_DATA;
 initialize() {
   if (initialized) return;
   initialized = TRUE;
-  integer objectPrimCount = llGetObjectPrimCount(llGetKey());
-  integer currentLinkNumber = 0;
-  roller = -1;
-  while(currentLinkNumber <= objectPrimCount) {
-    list params = llGetLinkPrimitiveParams(currentLinkNumber, [PRIM_NAME]);
-    switch ((string) params[0]) {
-    case "roller": {
-      roller = currentLinkNumber;
-      break;
-    }
-    default: break;
-    }
-    ++currentLinkNumber;
-  }
   hour = minute = second = 0;
 }
 
@@ -74,7 +59,7 @@ integer calculateHeartRate(float speedMps, float cardioFactor) {
   if (speedMps <= 0) {
     return (integer) restingHeartRate;
   }
-  float intensityPercent = speedMps / redlineSpeed;
+  float intensityPercent = speedMps / redlineSpeed * 0.85; // bike factor
     
   // 4. APPLY KARVONEN FORMULA
   // TargetHR = RestingHR + (HeartRateReserve * Intensity)
@@ -103,7 +88,7 @@ float xpGain(float distance, float resistance_percent, float s, float f) {
 float fatGain(float resist_percent, float speed_percent, float endurance, 
 	      integer time, integer constitution, float f) {
   float intensity = resist_percent * resist_percent + speed_percent * speed_percent;
-  float rate = ((intensity - endurance) * time) / constitution;
+  float rate =  ((intensity - endurance) * time) / constitution;
   return rate * (1 + f * f);
 }
 
@@ -111,6 +96,7 @@ float fatGain(float resist_percent, float speed_percent, float endurance,
 compute(float distance, float resistance_percent, float speed_percent,
 	float endurance, integer time, integer constitution) {
   float gain = fatGain(resistance_percent, speed_percent, endurance, time, constitution, fatigue);
+  if (total_fatigue < 0) gain *= 2.0;
   fatigue = total_fatigue + gain;
   if (fatigue < -1) fatigue = -1;
   xp = total_xp + xpGain(distance, resistance_percent, meters_per_second, gain);
@@ -139,7 +125,6 @@ setSpeed(integer speed, integer updateAnim) {
   string name;
   float liquid_inc;
   float spin_time;
-  float framerate;
   float now = llGetTime();
   string old_animation = animation;
   float mps = meters_per_second;
@@ -161,58 +146,45 @@ setSpeed(integer speed, integer updateAnim) {
   name = llGetSubString((string)(speed/1000.0),0,3) + " kM/H";
   switch((integer) (speed/1000) - 2) {
   case 1: {
-    animation = "slow";
+    animation = "bic-regular";
     //    name = "3 kM/H";
-    liquid_inc = 0.01 * resistance_inverse_percent;
     spin_time = 0.25 * resistance_inverse_percent;
-    framerate= 0.25;
     break;
   }
   case 2: {
-    animation = "quick";
+    animation = "bic-regular";
     //    name = "4 kM/H";
-    liquid_inc = 0.01 * resistance_inverse_percent;
     spin_time = 0.2 * resistance_inverse_percent;
     break;
   }
   case 3: {
-    animation = "powerwalk";
+    animation = "bic-regular";
     //    name = "5 kM/H";
-    liquid_inc = 0.015 * resistance_inverse_percent;
     spin_time = 0.15 * resistance_inverse_percent;
-    framerate= 0.5;
     break;
   }
   case 4: {
-    animation = "jog";
+    animation = "bic-regular";
     //    name = "6 kM/H";
-    liquid_inc = 0.02 * resistance_inverse_percent;
     spin_time = 0.15 * resistance_inverse_percent;
-    framerate= 0.666667;
     break;
   }
   case 5: {
-    animation = "forced";
+    animation = "bic-regular";
     //    name = "7 kM/H";
-    liquid_inc = 0.02 * resistance_inverse_percent;
     spin_time = 0.15 * resistance_inverse_percent;
-    framerate= 0.666667;
     break;
   }
   case 6: {
-    animation = "run";
+    animation = "bic-regular";
     //    name = "8 kM/H";
-    liquid_inc = 0.025 * resistance_inverse_percent;
     spin_time = 0.125 * resistance_inverse_percent;
-    framerate= 1;
     break;
   }
   case 7: {
-    animation = "melee";
+    animation = "bic-regular";
     //    name = "9 kM/H";
-    liquid_inc = 0.03333 * resistance_inverse_percent;
     spin_time = 0.125 * resistance_inverse_percent;
-    framerate= 1.25;
     meters_per_second = 2.5;
     break;
   }
@@ -221,11 +193,9 @@ setSpeed(integer speed, integer updateAnim) {
   case 10:
   case 11:
   case 12:{
-    animation = "fast";
+    animation = "bic-regular";
     //    name = "10 kM/H";
-    liquid_inc = 0.03333 * resistance_inverse_percent;
     spin_time = 0.125 * resistance_inverse_percent;
-    framerate= 1.25;
     break;
   }
   case 13:
@@ -233,27 +203,21 @@ setSpeed(integer speed, integer updateAnim) {
   case 15:
   case 16:
   case 17: {
-    animation = "faster";
+    animation = "bic-regular";
     //name = "15 kM/H";
-    liquid_inc = 0.04 * resistance_inverse_percent;
     spin_time = 0.1 * resistance_inverse_percent;
-    framerate= 1.5;
     break;
   }
   case 18: {
-    animation = "fastest";
+    animation = "bic-regular";
     //    name = "20 kM/H";
-    liquid_inc = 0.05 * resistance_inverse_percent;
     spin_time = 0.1 * resistance_inverse_percent;
-    framerate= 2;
     break;
   }
   default: {
-    animation = "slow";
+    animation = "bic-regular";
     //    name = "3 kM/H";
-    liquid_inc = 0.01 * resistance_inverse_percent;
     spin_time = 0.25 * resistance_inverse_percent;
-    framerate= 0.25;
     break;
   }
   }
@@ -267,10 +231,8 @@ setSpeed(integer speed, integer updateAnim) {
       if (animation != old_animation)
 	llMessageLinked(LINK_THIS, SetSpeedAnimation, animation, cyclist);
       llMessageLinked(LINK_THIS, 0, name, "fw_data:Speed");
-      llSetLinkTextureAnim(roller, ANIM_ON | LOOP | SMOOTH, ALL_SIDES, 1, 1, 1, 1, 0-framerate);
     }
-    llMessageLinked(LINK_THIS, GEAR_SPEED, (string)(speed/1000),NULL_KEY);
-    llMessageLinked(LINK_THIS, START_HYDRAULICS, "|" + (string) liquid_inc + "|" + (string) spin_time, cyclist);
+    llMessageLinked(LINK_THIS, WHEEL_SPEED, (string)(speed/1000),NULL_KEY);
     llMessageLinked(LINK_THIS, 0, (string) hr + " BPM", "fw_data:Heart");
   }
 }
@@ -361,8 +323,8 @@ default {
       integer old = speed;
       speed = (integer) msg;
       debug((string) speed);
-      if (speed < 3000) speed = 3000;
-      if (speed > 20000) speed = 20000;
+      if (speed < 5000) speed = 5000;
+      if (speed > 55000) speed = 55000;
       setSpeed(speed, speed != old);
       setPower();
       llSetTimerEvent(UpdateTime);
@@ -373,8 +335,8 @@ default {
       integer old = speed;
       speed += (integer) msg;
       debug((string) speed);
-      if (speed < 3000) speed = 3000;
-      if (speed > 20000) speed = 20000;
+      if (speed < 5000) speed = 5000;
+      if (speed > 55000) speed = 55000;
       setSpeed(speed, speed != old);
       setPower();
       llSetTimerEvent(UpdateTime);
@@ -385,35 +347,9 @@ default {
       integer old = speed;
       speed -= (integer) msg;
       debug((string) speed);
-      if (speed < 3000) speed = 3000;
-      if (speed > 20000) speed = 20000;
+      if (speed < 5000) speed = 5000;
+      if (speed > 55000) speed = 55000;
       setSpeed(speed, speed != old);
-      setPower();
-      llSetTimerEvent(UpdateTime);
-      break;
-    }
-    case ResistUp: {
-      integer new = resistance + 1;
-      if (new < 1) new = 1;
-      if (new > 9) new = 9;
-      if (resistance == new) return;
-      llSetTimerEvent(0);
-      resistance_inverse_percent = (1.0 - (new / 10.0) + 0.1);
-      setSpeed(speed, FALSE);
-      resistance = new;
-      setPower();
-      llSetTimerEvent(UpdateTime);
-      break;
-    }
-    case ResistDown: {
-      integer new = resistance - 1;
-      if (new < 1) new = 1;
-      if (new > 9) new = 9;
-      if (resistance == new) return;
-      llSetTimerEvent(0);
-      resistance_inverse_percent = (1.0 - (new / 10.0) + 0.1);
-      setSpeed(speed, FALSE);
-      resistance = new;
       setPower();
       llSetTimerEvent(UpdateTime);
       break;

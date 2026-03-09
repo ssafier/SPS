@@ -18,7 +18,7 @@ integer sitting = FALSE;
 
 integer seat;
 
-vector target = <0,0,0.1>;
+vector target = <0,-0.25,0.4>;
 vector offset = <0,0,0>;
 rotation target_rot;
 
@@ -42,6 +42,7 @@ init() {
   list params= llGetLinkPrimitiveParams(LINK_THIS, [PRIM_DESC]);
   string desc = (string) params[0];
   seat = -1;
+  target_rot = llEuler2Rot(<0,0,270>*DEG_TO_RAD);
   while(currentLinkNumber <= objectPrimCount) {
     list params = llGetLinkPrimitiveParams(currentLinkNumber, [PRIM_NAME]);
     switch ((string) params[0]) {
@@ -126,8 +127,18 @@ default {
       break;
     }
     case testHudCheckFail: {
-    cyclist = NULL_KEY;
+      cyclist = NULL_KEY;
       llSay(0, "Please wear the SPS HUD.");
+      break;
+    }
+    case returnLeaf: {
+      string s;
+      GET_CONTROL;
+      POP(s);
+      if (s != "STRING") return;
+      POP(s);
+      if (s == "[STAND]") llUnSit(cyclist);
+      NEXT_STATE;
       break;
     }
     default: break;
@@ -143,14 +154,11 @@ default {
 	 llAvatarOnLinkSitTarget(seat) != llGetLinkKey(cyclist_link))) {
       llMessageLinked(LINK_SET, WHEEL_OFF, "", NULL_KEY);
       llReleaseControls();
-      /* TODO
-	 llMessageLinked(LINK_SET, deactivateButtons, "", cyclist);
-	 llMessageLinked(LINK_THIS,0, "0:00:00", "fw_data:Time");
-	 llMessageLinked(LINK_THIS,0, "0 kM/H", "fw_data:Speed");
-	 llMessageLinked(LINK_THIS,0, "0 W", "fw_data:Power");
-	 llMessageLinked(LINK_THIS,0, "0 BPM", "fw_data:Heart");
-	 llMessageLinked(LINK_THIS,0,"Bike","fw_data:Label");
-      */
+      llMessageLinked(LINK_SET, deactivateButtons, "", cyclist);
+      llMessageLinked(LINK_THIS,0, "0:00:00", "fw_data:Time");
+      llMessageLinked(LINK_THIS,0, "0 kM/H", "fw_data:Speed");
+      llMessageLinked(LINK_THIS,0, "0 W", "fw_data:Power");
+      llMessageLinked(LINK_THIS,0, "0 BPM", "fw_data:Heart");
       llMessageLinked(LINK_THIS, publishSet, "|bike|", cyclist);
       llSay((integer)("0x"+ llGetSubString((string) cyclist, -8, -1)),"reset|");
       cyclist = NULL_KEY;
