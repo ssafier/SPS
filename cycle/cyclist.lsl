@@ -18,7 +18,7 @@ integer sitting = FALSE;
 
 integer seat;
 
-vector target = <0,-0.25,0.4>;
+vector target = <0,0.75,1.25>;
 vector offset = <0,0,0>;
 rotation target_rot;
 
@@ -61,7 +61,7 @@ init() {
 updateSitTarget(vector pos, rotation rot) {
   debug((string) pos + " " + (string) rot);
   llLinkSitTarget(seat, pos, rot);
-  llSetLinkPrimitiveParamsFast(seat,
+  llSetLinkPrimitiveParamsFast(cyclist_link,
 			       [PRIM_POS_LOCAL, pos + <0.0, 0.0, 0.4> - (llRot2Up(rot) * fAdjust),
 			       PRIM_ROT_LOCAL, rot]);
 }

@@ -31,8 +31,7 @@ default {
       break;
     }
     case WHEEL_SPEED: {
-      float s = (float) msg;
-      rot = TWO_PI / (s * 2);
+      float rot = ((float) msg * (10.0 / 36.0)) / 0.375;
       llTargetOmega(axis,rot,1);
       break;
     }

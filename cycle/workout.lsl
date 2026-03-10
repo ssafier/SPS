@@ -124,7 +124,6 @@ setSpeed(integer speed, integer updateAnim) {
   string animation;
   string name;
   float liquid_inc;
-  float spin_time;
   float now = llGetTime();
   string old_animation = animation;
   float mps = meters_per_second;
@@ -144,86 +143,20 @@ setSpeed(integer speed, integer updateAnim) {
   start_time = now;
   meters_per_second = speed / 3600.0;
   name = llGetSubString((string)(speed/1000.0),0,3) + " kM/H";
-  switch((integer) (speed/1000) - 2) {
-  case 1: {
+  integer speedkm = speed / 1000;
+  if (speedkm <= 10) {
     animation = "bic-regular";
-    //    name = "3 kM/H";
-    spin_time = 0.25 * resistance_inverse_percent;
-    break;
+  } else if (speedkm <= 20) {
+    animation = "bic-nohands";	
+  }  else if (speedkm < 30) {
+    animation = "bic-hill";
+  } else {
+    animation = "bic-fast";
   }
-  case 2: {
-    animation = "bic-regular";
-    //    name = "4 kM/H";
-    spin_time = 0.2 * resistance_inverse_percent;
-    break;
-  }
-  case 3: {
-    animation = "bic-regular";
-    //    name = "5 kM/H";
-    spin_time = 0.15 * resistance_inverse_percent;
-    break;
-  }
-  case 4: {
-    animation = "bic-regular";
-    //    name = "6 kM/H";
-    spin_time = 0.15 * resistance_inverse_percent;
-    break;
-  }
-  case 5: {
-    animation = "bic-regular";
-    //    name = "7 kM/H";
-    spin_time = 0.15 * resistance_inverse_percent;
-    break;
-  }
-  case 6: {
-    animation = "bic-regular";
-    //    name = "8 kM/H";
-    spin_time = 0.125 * resistance_inverse_percent;
-    break;
-  }
-  case 7: {
-    animation = "bic-regular";
-    //    name = "9 kM/H";
-    spin_time = 0.125 * resistance_inverse_percent;
-    meters_per_second = 2.5;
-    break;
-  }
-  case 8:
-  case 9:
-  case 10:
-  case 11:
-  case 12:{
-    animation = "bic-regular";
-    //    name = "10 kM/H";
-    spin_time = 0.125 * resistance_inverse_percent;
-    break;
-  }
-  case 13:
-  case 14:
-  case 15:
-  case 16:
-  case 17: {
-    animation = "bic-regular";
-    //name = "15 kM/H";
-    spin_time = 0.1 * resistance_inverse_percent;
-    break;
-  }
-  case 18: {
-    animation = "bic-regular";
-    //    name = "20 kM/H";
-    spin_time = 0.1 * resistance_inverse_percent;
-    break;
-  }
-  default: {
-    animation = "bic-regular";
-    //    name = "3 kM/H";
-    spin_time = 0.25 * resistance_inverse_percent;
-    break;
-  }
-  }
+
   integer hr = calculateHeartRate(meters_per_second, cardioF);
   if (hr >= maxHeartRate) { // beyond max
-    speed = speed - 100;
+    speed = speed - 1000;
     meters_per_second = mps;
   } else {
     debug((string) hr + " " + (string) total_fatigue);
@@ -232,7 +165,7 @@ setSpeed(integer speed, integer updateAnim) {
 	llMessageLinked(LINK_THIS, SetSpeedAnimation, animation, cyclist);
       llMessageLinked(LINK_THIS, 0, name, "fw_data:Speed");
     }
-    llMessageLinked(LINK_THIS, WHEEL_SPEED, (string)(speed/1000),NULL_KEY);
+    llMessageLinked(LINK_SET, WHEEL_SPEED, (string)(speedkm),NULL_KEY);
     llMessageLinked(LINK_THIS, 0, (string) hr + " BPM", "fw_data:Heart");
   }
 }
