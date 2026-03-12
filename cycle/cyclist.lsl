@@ -170,7 +170,6 @@ default {
     integer sitTest = llSitOnLink(avi, seat);
     if (sitTest != 1)  return;
     integer count = 0;
-    llMessageLinked(LINK_THIS,0, llGetDisplayName(avi), "fw_data:Label");
     vector size = llGetAgentSize(avi);
     fAdjust = ((((0.008906 * size.z) + -0.049831) * size.z) + 0.088967) * size.z;
     integer linkNum = llGetNumberOfPrims();
