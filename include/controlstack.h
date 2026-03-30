@@ -66,9 +66,11 @@
     chan = (integer) n;							\
     index = llSubStringIndex(rest, "+");				\
     if (index != -1) {							\
+      seq = rest; \
       rest = llGetSubString(n, index + 1, -1);				\
       next = (integer) llGetSubString(n, 0, index - 1);			\
-    } else {								\
+    } else { \
+      seq = rest;              \
       next = (integer) rest;						\
       rest = "";							\
     }									\
