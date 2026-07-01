@@ -254,10 +254,3 @@
 #define saveClass 409
 #define incrementClassPay 410
 
-// Updater
-#define flyBee 500
-#define updateEquipment 501
-#define incrementUpdate 502
-
-#define sUpdateEquipment "501"
-#define sIncrementUpdate "502"

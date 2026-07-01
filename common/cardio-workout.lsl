@@ -84,6 +84,7 @@ initialize() {
 
 integer calculateHeartRate(float speedMps, float cardioFactor) {
   integer restingHeartRate = 95 - (integer) (50.0 * cardioFactor);
+  debug("heart");
   if (speedMps <= 0) {
     return (integer) restingHeartRate;
   }
@@ -115,6 +116,7 @@ float xpGain(float distance, float resistance_percent, float s, float f) {
 
 float fatGain(float resist_percent, float speed_percent, float endurance, 
 	      integer time, integer constitution, float f) {
+  debug("fat gain "+(string) constitution);
   float intensity = (resist_percent * resist_percent + speed_percent * speed_percent) * INTENSITY_FACTOR;
   float rate = ((intensity - endurance) * time) / constitution;
   return rate * (1 + f * f);
@@ -123,6 +125,7 @@ float fatGain(float resist_percent, float speed_percent, float endurance,
 // ---------------------------------------
 compute(float distance, float resistance_percent, float speed_percent,
 	float endurance, integer time, integer constitution) {
+  debug("compute");
   float gain = fatGain(resistance_percent, speed_percent, endurance, time, constitution, fatigue);
 #ifdef GAIN_MULT
   if (fatigue < 0) gain *= GAIN_MULT;
@@ -356,6 +359,7 @@ default {
       resistance_inverse_percent = 1;
       cardio = xyzzy;
       cardio_constitution = (integer) (cardioF * 200 - 20);
+      if (cardio_constitution < 10) cardio_constitution = 10;
       cardio_channel = (integer)("0x"+ llGetSubString((string) cardio, -8, -1));
       SayToHud("cardio|"+(string) channel + "|" + (string) LEGS_BIT);
       exercise_start_time = start_time = llGetTime();

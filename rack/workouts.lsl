@@ -489,6 +489,7 @@ default {
 	chan != publishSet &&
 	chan != startResting &&
 	chan != restInterval) return;
+    debug(msg);
     GET_CONTROL_GLOBAL;
     string a;
     switch (chan) {
