@@ -47,6 +47,9 @@ class Sps extends BaseController
         ResponseInterface $response,
         LoggerInterface $logger) {
         parent::initController($request, $response, $logger);
+
+        date_default_timezone_set('America/Denver');
+
         $this->players = new Lifters();
         $this->body_parts = new BodyStats();
         $this->supplements = new Supps();
@@ -154,7 +157,6 @@ class Sps extends BaseController
         if ($s != null) {
             $count = count($s);
             // TODO: UTC
-            date_default_timezone_set('America/Denver');
             $now = Time::now();
             for ($i = 0; $i < $count; $i++) {
                 $updated = false;
@@ -233,7 +235,7 @@ class Sps extends BaseController
         }
         if (array_key_exists('dollars', $json)) {
             $player->points = (integer) $json['dollars'] +$player->points;
-            $this->players-update($player->id, $player);
+            $this->players->update($player->id, $player);
         }
         return $retval;
     }
@@ -311,7 +313,7 @@ class Sps extends BaseController
             if ($s != null) {
                 $count = count($s);
                 // TODO: UTC
-                date_default_timezone_set('America/Denver');
+
                 $now = Time::now();
                 for ($i = 0; $i < $count; $i++) {
                     $updated = false;
@@ -513,7 +515,7 @@ class Sps extends BaseController
             $output['flexibility'] = $player->flex;
             $messages = array();
             // TODO: UTC
-            date_default_timezone_set('America/Denver');
+
             $output['aerobic'] = $this->cardioFactor($player->id);
 
             $now = Time::now();
@@ -595,7 +597,7 @@ class Sps extends BaseController
         if ($p != null && count($p) > 0) {
             $player = $p[0];
                         // TODO: UTC
-            date_default_timezone_set('America/Denver');
+
             $now = Time::now();
             $mys = $this->supplements->where('player =', $player->id)->where('expiration >',$now)->where('supplement = ', $s)->findAll();
             if ($mys == null || count($mys) == 0) {
@@ -706,14 +708,14 @@ class Sps extends BaseController
             return;
         }
         $retval = array();
-        date_default_timezone_set('America/Denver');
+
         $p = $this->players->where('avi =',$json['player'])->findAll();
         if (!$p || count($p) == 0) {
             $retval['status'] = 'error';
             log_message('debug','no player');
         } else {
             $player = $p[0];
-            date_default_timezone_set('America/Denver');
+
             $retval['fatigue'] = 0;
 
             $retval['cardioF'] = $this->cardioFactor($player->id);
@@ -810,7 +812,7 @@ class Sps extends BaseController
         $s = $this->body_parts->where('player =', $player->id)->findAll();
         $count = count($s);
         // TODO: UTC
-        date_default_timezone_set('America/Denver');
+
         $now = Time::now();
         for ($i = 0; $i < $count; $i++) {
             $updated = false;
@@ -897,7 +899,7 @@ class Sps extends BaseController
             if (!$tl || count($tl) == 0) {
                 $entry = new \App\Entities\WorkoutEntry();
                 $entry->duration = $tlog['duration'];
-                $entry->type = 1;
+                $entry->type = 5;
                 $entry->player = $player->id;
                 $entry->updated_at = time();
                 $entry->inserted_at = time();
