@@ -331,7 +331,16 @@ default {
     result += updateBP(CORE_BIT, core_values, total_fat, total_injury, time);
     result += updateBP(CHEST_BIT, chest_values, total_fat, total_injury, time);
     result += updateBP(LEGS_BIT, legs_values, total_fat, total_injury, time);
-    if (result != []) SayToHud("yoga-tick|" + (string) time + "|" + llDumpList2String(result,"|"));
+    string msg = "yoga-tick|" + (string) time;
+    
+    // Append the body part updates ONLY if there are any
+    if (result != []) {
+        msg += "|" + llDumpList2String(result,"|");
+    } else {
+      msg += "|";
+    }
+    
+    SayToHud(msg);
     llMessageLinked(LINK_THIS, incrementClassPay, "|", yogi);
   }
 }
