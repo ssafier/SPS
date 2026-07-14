@@ -82,6 +82,15 @@ vector getColor(float fat, float inj) {
   return color;
 }
 
+updateTotalStrength() {
+  integer total = (integer) arms_values[0] +
+    (integer) legs_values[0] +	
+    (integer) core_values[0] +
+    (integer) back_values[0] +
+    (integer) chest_values[0];
+  llMessageLinked(LINK_THIS, 0, (string) total, "fw_data: TotalStr");
+}
+
 //----------------------------------
 #ifdef STRENGTH
 #undef STRENGTH
@@ -146,12 +155,7 @@ parseSPS(string body) {
   core_values = setBP(coreV, "Core", core_status, core_prim, rir);
   if (legs_values != []) rir = (float) legs_values[RIR]; else rir = 0;
   legs_values = setBP(legsV, "Legs", legs_status, legs_prim, rir);
-  integer total = (integer) arms_values[0] +
-    (integer) legs_values[0] +	
-    (integer) core_values[0] +
-    (integer) back_values[0] +
-    (integer) chest_values[0];
-  llMessageLinked(LINK_THIS, 0, (string) total, "fw_data: TotalStr");
+  updateTotalStrength();
   string supps = llJsonGetValue(body, ["supplements"]);
   integer len;
   integer i;
@@ -331,8 +335,7 @@ default {
       break;
     }
     }
-    channel = 0;
-    }
+  }
 
 //----------------------------------
   attach(key agent) {
@@ -377,12 +380,18 @@ default {
 //----------------------------------
   http_response(key r, integer status, list meta, string body) {
     if (r == http_handle) {
-      parseSPS(body);
+      if (status == 200 && llJsonValueType(body, []) == JSON_OBJECT) {
+	parseSPS(body);
+      } else {
+	llOwnerSay("Error reading SPS Database.");
+      }
     }
   }
 
 //----------------------------------
   listen(integer chan, string name, key xyzzy, string msg) {
+    list caller = llGetObjectDetails(xyzzy, [OBJECT_NAME]);
+    if (llSubStringIndex((string) caller[0],"[SPS] ") != 0) return;
     list command = llParseStringKeepNulls(msg, ["|"], []);
     debug(msg);
     switch((string) command[0]) {
@@ -418,6 +427,7 @@ default {
       }
       break;
     }
+      // ends a workout started below
     case "workout-set": {
       integer len = llGetListLength(command);
       integer i;
@@ -436,14 +446,10 @@ default {
 	  legs_values = updateBP(llList2List(u,1,-1),"Legs", legs_status, legs_prim);
 	}
       }
-      integer total = (integer) arms_values[0] +
-	(integer) legs_values[0] +	
-	(integer) core_values[0] +
-	(integer) back_values[0] +
-	(integer) chest_values[0];
-      llMessageLinked(LINK_THIS, 0, (string) total, "fw_data: TotalStr");
+      updateTotalStrength();
       break;
     }
+      // updates based on stretching
     case "yoga-tick": {
       integer len = llGetListLength(command);
       integer i;
@@ -481,7 +487,7 @@ default {
       llMessageLinked(LINK_THIS, 0, t, "fw_data: Info");
       break;
     }
-
+      // starts a workout ended by workout-set
     case "cardio": // in case we need to do something different
     case "workout":  machine_workout = (integer)(string) command[2];
     case "yoga": { // initialize
@@ -503,6 +509,7 @@ default {
       machine_workout = (integer)(string) command[1];
       break;
     }
+      // end a set but not the workout
     case "end": {
       llSetTimerEvent(UPDATE_TIMER);
       // need to start timer
