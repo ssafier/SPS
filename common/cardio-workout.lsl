@@ -263,20 +263,12 @@ setSpeed(integer speed, integer updateAnim) {
     framerate= 1.5;
     break;
   }
-  case 18: {
+  default: {
     animation = "fastest";
     //    name = "20 kM/H";
     liquid_inc = 0.05 * resistance_inverse_percent;
     spin_time = 0.1 * resistance_inverse_percent;
     framerate= 2;
-    break;
-  }
-  default: {
-    animation = "slow";
-    //    name = "3 kM/H";
-    liquid_inc = 0.01 * resistance_inverse_percent;
-    spin_time = 0.25 * resistance_inverse_percent;
-    framerate= 0.25;
     break;
   }
   }
