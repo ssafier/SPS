@@ -9,6 +9,9 @@ integer channel;
 integer handle;
 integer link;
 
+integer current_major;
+integer current_minor;
+
 #define SayToHud(x) llRegionSayTo(xyzzy, lifter_channel, (string)(x))
 
 default {
@@ -16,6 +19,9 @@ default {
     channel = (integer)("0x"+ llGetSubString((string) llGetKey(), -8, -1));
     handle = llListen(channel, "", NULL_KEY, "");
     llListenControl(handle, FALSE);
+    current_major = llSubStringIndex(VERSION, ".");
+    current_minor = (integer) llGetSubString(VERSION, current_major + 1, -1);
+    current_major = (integer) llGetSubString(VERSION, 0, current_major - 1);
   }
   
   link_message(integer from, integer chan, string msg, key xyzzy) {
@@ -33,11 +39,21 @@ default {
     llSetTimerEvent(0);
     llListenControl(handle, FALSE);
     debug("pass "+msg);
-    if (msg != ("|" + VERSION)) {
-      llSay(0, "You have an old version of the hud.  Please take a new hud from the vendor.");
-      llMessageLinked(link, testHudCheckFail, msg, xyzzy);
-    } else {
+    msg = llGetSubString(msg, 1, -1);
+    if (msg == VERSION) {
       llMessageLinked(link, testHudCheckPass, msg, xyzzy);
+    } else {
+      integer major = llSubStringIndex(msg, ".");
+      integer minor = (integer) llGetSubString(msg, major + 1, -1);
+      major = (integer) llGetSubString(msg, 0, major - 1);
+      // always fail if major version is different
+      // accept greater minor versions
+      if (major != current_major || minor > current_minor) {
+	llSay(0, "You have an old version of the hud.  Please take a new hud from the vendor.");
+	llMessageLinked(link, testHudCheckFail, msg, xyzzy);
+      } else {
+	llMessageLinked(link, testHudCheckPass, msg, xyzzy);
+      }
     }
   }
 
