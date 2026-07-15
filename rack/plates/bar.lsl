@@ -10,7 +10,7 @@ key lifter;
 string animation;
 integer update_offset;
 vector offset;
-rotation lrot;
+float animation_scale;
 
 list data;
 integer outchan;
@@ -24,8 +24,9 @@ default {
     float diameter = (float) (string) params[1];
     integer strength = (integer) (string) params[2];
     integer weight = (integer) (string) params[3];
-    offset = (vector)(string)params[4];
-    lrot = (rotation)(string)params[5];
+    animation_scale = (float) params[4];
+    if (animation_scale == 0) animation_scale = 1;
+    offset = ZERO_VECTOR;
     update_offset = FALSE;
     lifter = NULL_KEY;
     animation = "";
@@ -117,9 +118,41 @@ default {
   
   attach(key id) {
     if (id) {
-      llSetLinkPrimitiveParamsFast(LINK_THIS,
-				   [PRIM_ROT_LOCAL, lrot,
-				    PRIM_POS_LOCAL, llGetLocalPos() + offset]);
+// 1. Give the animation a moment to fully pose the avatar
+        llSleep(0.5); 
+
+        // 2. Define the target center (using the 'origin' variable from bar.lsl)
+        vector target_center = origin; 
+
+        // 3. Get the avatar's root position and rotation
+        vector root_pos = llGetPos();
+        rotation root_rot = llGetRot();
+
+        // 4. Get the bar's local offset and rotation relative to the hand
+        vector local_pos = llGetLocalPos();
+        rotation local_rot = llGetLocalRot();
+
+        // 5. Reconstruct the TRUE world position and rotation of the bar
+	rotation new_local_rot = llEuler2Rot(<0.0, -90.0, 0.0> * DEG_TO_RAD);
+	vector bar_world_pos = root_pos + (local_pos * root_rot);
+        rotation bar_world_rot = new_local_rot * root_rot;
+
+        // 6. Calculate the world difference vector
+        vector diff = target_center - bar_world_pos;
+
+        // 7. Get the world-space direction of the bar's Z-axis (its shaft)
+        vector bar_shaft_axis = <0.0, 0.0, 1.0> * bar_world_rot;
+
+        // 8. Dot product: How far to slide along the bar's shaft to center it
+        float slide_distance = diff * bar_shaft_axis * animation_scale;
+
+        // 9. Apply the correction strictly to the local Z-axis
+	vector slide_vector = <0.0, 0.0, slide_distance> * new_local_rot;
+        local_pos -= slide_vector;
+
+        llSetLinkPrimitiveParamsFast(LINK_ROOT,
+				     [PRIM_POS_LOCAL, local_pos,
+				      PRIM_ROT_LOCAL, new_local_rot]);
       integer i;
       integer count = llGetListLength(data);
       
@@ -127,7 +160,7 @@ default {
       for (i=0; i<count; i+=4)  {
 	integer linkNum = (integer) data[i];
 	vector localPos = (vector) data[i+1];
-	rotation localRot = (rotation)data[i+2];
+	rotation localRot = (rotation) data[i+2];
 	vector size = (vector) data[i+3];
 	//llOwnerSay((string) llRot2Euler(localRot));
 	llSetLinkPrimitiveParamsFast(linkNum,

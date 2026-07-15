@@ -27,8 +27,7 @@ float diameter;
 integer weight_count;
 vector bar_position;
 rotation bar_rotation;
-vector bar_offset;
-rotation bar_arot;
+float animation_offset;
 rotation ref_rot;
 integer weight;
 
@@ -143,9 +142,8 @@ state on {
       list params = llParseString2List(msg,["|"],[]);
       bar_position = (vector)(string)params[0];
       bar_rotation = (rotation)(string)params[1];
-      bar_offset = (vector)(string)params[2];
-      bar_arot = (rotation)(string)params[3];
-      ref_rot = (rotation)(string)params[4] * llGetRot();
+      animation_offset = (float)(string)params[2];
+      ref_rot = (rotation)(string)params[3] * llGetRot();
       break;
     }
     case resetWeights: {
@@ -153,8 +151,8 @@ state on {
 	llSay(channel,"DIE");
       }
       weight_set = NULL_KEY;
-      bar_position = bar_offset = ZERO_VECTOR;
-      bar_rotation = bar_arot = ref_rot = ZERO_ROTATION;
+      bar_position = ZERO_VECTOR;
+      bar_rotation = ref_rot = ZERO_ROTATION;
       break;
     }
     case rezWeights: {
@@ -172,7 +170,7 @@ state on {
 					   REZ_VEL, ZERO_VECTOR, FALSE, FALSE,
 					   REZ_ROT, bar_rotation * ref_rot, FALSE,
 					   REZ_PARAM_STRING,
-					   (string) bar_length + "|" + (string) diameter + "|" + (string) strength + "|" + (string) weight + "|" + (string) bar_offset + "|"+ (string) bar_arot]);
+					   (string) bar_length + "|" + (string) diameter + "|" + (string) strength + "|" + (string) weight + "|" + (string) animation_offset]);
       
       break;
     }

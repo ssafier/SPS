@@ -80,7 +80,7 @@ string values2Json(list v, float time) {
   float injured = (float) v[INJURED];
   integer result = FALSE;
   if (fat < 0.01) fat = 0.01;
-  if (injured < 0) injured = 0;
+  if (injured < 0 || total_injury == 0) injured = 0;
 
   if (injured > 0) {
     injured -= (injured / total_injury) * INTEGRITY_CHANGE * time;

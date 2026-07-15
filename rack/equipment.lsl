@@ -33,18 +33,17 @@ key note_handle;
 integer initialized = FALSE;
 
 #define COUNT 6
-//exercise|string|vector><rotation|back/front/inside+z|z|vector><rotation|vector><rotation
-#define STRIDE 10
+
+#define STRIDE 9
 #define NAME 0 
 #define BAR 1
 #define BAR_ROT 2
-#define BAR_OFFSET 3
-#define BAR_ATTACH_ROT 4
-#define HOLDER_BAR 5
-#define HOLDER_Z 6
-#define SUPPORT 7
-#define BENCH_POS 8
-#define BENCH_ROT 9
+#define ANIMATION_OFFSET 3
+#define HOLDER_BAR 4
+#define HOLDER_Z 5
+#define SUPPORT 6
+#define BENCH_POS 7
+#define BENCH_ROT 8
 
 list exercises;
 
@@ -217,9 +216,8 @@ default {
 		idx = llSubStringIndex((string) p[1], ">");
 		vector barp = (vector) llGetSubString((string) p[1], 0, idx) ;
 		rotation barr = llEuler2Rot((vector) llGetSubString((string) p[1], idx+1, -1) * DEG_TO_RAD) ;
-		idx = llSubStringIndex((string) p[2], ">");
-		vector baroffset = (vector) llGetSubString((string) p[2], 0, idx) ;
-		rotation barar = llEuler2Rot((vector) llGetSubString((string) p[2], idx+1, -1) * DEG_TO_RAD) ;
+		float ap = (float) p[2];
+
 		idx = llSubStringIndex((string) p[5], ">");
 		vector bp = (vector) llGetSubString((string) p[5], 0, idx)  ;
 		rotation br = llEuler2Rot((vector) llGetSubString((string) p[5], idx+1, -1) * DEG_TO_RAD);
@@ -227,7 +225,7 @@ default {
 		exercises = exercises + [
 					 (string) p[0],
 					 barp, barr,
-					 baroffset, barar,
+					 ap,
 					 hbar, hz,
 					 (float)(string)p[4],
 					 bp, br];
@@ -287,13 +285,12 @@ default {
       }
       vector bar_position = (vector) exercise[BAR];
       rotation bar_rotation = (rotation) exercise[BAR_ROT];
-      vector bar_offset = (vector) exercise[BAR_OFFSET];
-      rotation bar_arot = (rotation) exercise[BAR_ATTACH_ROT];
+      float animation_offset = (float) exercise[ANIMATION_OFFSET];
       llMessageLinked(LINK_THIS, configureBar,
 		      (string) bar_position + "|" +
 		      (string) bar_rotation + "|" +
-		      (string) bar_offset + "|" +
-		      (string) bar_arot, NULL_KEY);
+		      (string) animation_offset + "|" + (string) ZERO_ROTATION,
+		      NULL_KEY);
       vector s1 = (vector) support_1[1];
       vector s2 = (vector) support_2[1];
       rotation r = ZERO_ROTATION;
