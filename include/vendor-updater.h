@@ -1,0 +1,2 @@
+#define UPDATE_CHANNEL 41706202
+#define ITEM_NAME "[SPS] Vendor"
