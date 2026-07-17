@@ -80,40 +80,40 @@ default {
       }
       case "Dec Speed": {
 	if (speed_inc > 0) speed_inc = -speed_inc;
-	llMessageLinked(LINK_SET, setResistText, "Decrease speed\n"+llGetSubString((string) (speed_inc * 1000), 0, 2) + "kM/H", xyzzy);
+	llMessageLinked(LINK_SET, setSpeedText, "Decrease speed\n"+llGetSubString((string) (speed_inc * 1000), 0, 2) + "kM/H", xyzzy);
 	break;
       }
       case "Inc Speed": {
 	if (speed_inc < 0) speed_inc = -speed_inc;
-	llMessageLinked(LINK_SET, setResistText, "Increase speed\n"+llGetSubString((string) (speed_inc * 1000), 0, 2) + "kM/H", xyzzy);
+	llMessageLinked(LINK_SET, setSpeedText, "Increase speed\n"+llGetSubString((string) (speed_inc * 1000), 0, 2) + "kM/H", xyzzy);
 	break;
       }
       case "-0.1kM/H": {
 	speed_inc = -0.1;
-	llMessageLinked(LINK_SET, setResistText, "Decrease speed\n"+llGetSubString((string) (speed_inc * 1000), 0, 2) + "kM/H", xyzzy);
+	llMessageLinked(LINK_SET, setSpeedText, "Decrease speed\n"+llGetSubString((string) (speed_inc * 1000), 0, 2) + "kM/H", xyzzy);
 	break;
       }
       case "-1kM/H": {
 	speed_inc = -1;	
-	llMessageLinked(LINK_SET, setResistText, "Decrease speed\n"+llGetSubString((string) (speed_inc * 1000), 0, 2) + "kM/H", xyzzy);
+	llMessageLinked(LINK_SET, setSpeedText, "Decrease speed\n"+llGetSubString((string) (speed_inc * 1000), 0, 2) + "kM/H", xyzzy);
 	break;
       }
       case "0.1kM/H": {
 	speed_inc = 0.1;
-	llMessageLinked(LINK_SET, setResistText, "Increase speed\n"+llGetSubString((string) (speed_inc * 1000), 0, 2) + "kM/H", xyzzy);
+	llMessageLinked(LINK_SET, setSpeedText, "Increase speed\n"+llGetSubString((string) (speed_inc * 1000), 0, 2) + "kM/H", xyzzy);
 	break;
       }
       case "1kM/H": {
 	speed_inc = 1;
-	llMessageLinked(LINK_SET, setResistText, "Increase speed\n"+llGetSubString((string) (speed_inc * 1000), 0, 2) + "kM/H", xyzzy);
+	llMessageLinked(LINK_SET, setSpeedText, "Increase speed\n"+llGetSubString((string) (speed_inc * 1000), 0, 2) + "kM/H", xyzzy);
 	break;
       }
       case "Resistance": {
 	string buttons;
 	if (resist_inc < 0) {
-	  buttons = "[Stand]+Inc Resist+";
+	  buttons = "[Stand]+Inc Resist";
 	} else {
-	  buttons = "[Stand]+Dec Resist+";
+	  buttons = "[Stand]+Dec Resist";
 	}
 	llMessageLinked(LINK_THIS,
 			doMenu,

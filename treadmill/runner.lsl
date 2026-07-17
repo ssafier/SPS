@@ -35,11 +35,7 @@ integer offset_dist = 1; // 5, 10, 25
 
 integer initialized = FALSE;
 
-// ------------------------------
-init() {
-  if (initialized) return;
-  initialized = TRUE;
-  target_rot = llEuler2Rot(<0,0,-90>*DEG_TO_RAD);
+setLinks(key avi) {
   integer objectPrimCount = llGetObjectPrimCount(llGetKey());
   integer currentLinkNumber = 0;
   list params= llGetLinkPrimitiveParams(LINK_THIS, [PRIM_DESC]);
@@ -48,23 +44,34 @@ init() {
   base = roller = -1;
   while(currentLinkNumber <= objectPrimCount) {
     list params = llGetLinkPrimitiveParams(currentLinkNumber, [PRIM_NAME]);
-    switch ((string) params[0]) {
-    case "[SPS] Treadmill": {
-      base = currentLinkNumber;
-      break;
-    }
-    case "roller": {
-      roller = currentLinkNumber;
-      break;
-    }
-    case "display": {
-      displays += [currentLinkNumber];
-      break;
-    }
-    default: break;
+    if (avi != NULL_KEY && avi == llGetLinkKey(currentLinkNumber)) {
+      link_num = currentLinkNumber;
+    } else {
+      switch ((string) params[0]) {
+      case "[SPS] Treadmill": {
+	base = currentLinkNumber;
+	break;
+      }
+      case "roller": {
+	roller = currentLinkNumber;
+	break;
+      }
+      case "display": {
+	displays += [currentLinkNumber];
+	break;
+      }
+      default: break;
+      }
     }
     ++currentLinkNumber;
   }
+}
+// ------------------------------
+init() {
+  if (initialized) return;
+  initialized = TRUE;
+  target_rot = llEuler2Rot(<0,0,-90>*DEG_TO_RAD);
+  setLinks(NULL_KEY);
   offset = ZERO_VECTOR; 
   target = <0,0,0.7>;
   offset = <0,0,0>;
@@ -178,12 +185,7 @@ default {
     fAdjust = ((((0.008906 * size.z) + -0.049831) * size.z) + 0.088967) * size.z;
     integer linkNum = llGetNumberOfPrims();
     link_num = -1;
-    while(linkNum > 0 && link_num == -1) {
-      if (avi == llGetLinkKey(linkNum))
-	link_num = linkNum;
-      else
-	--linkNum;
-    }
+    setLinks(avi);
     if (link_num == -1) llSay(0,"Can't find avatar.");
     llMessageLinked(LINK_THIS, disallowTrainer, (string) avi, avi);
     llTakeControls(CONTROL_UP | CONTROL_DOWN | CONTROL_LEFT | CONTROL_RIGHT | CONTROL_FWD | CONTROL_BACK, TRUE, FALSE);
