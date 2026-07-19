@@ -36,17 +36,17 @@ integer offset_dist = 1; // 5, 10, 25
 integer initialized = FALSE;
 
 setLinks(key avi) {
-  integer objectPrimCount = llGetObjectPrimCount(llGetKey());
-  integer currentLinkNumber = 0;
+  integer objectPrimCount = llGetObjectPrimCount(llGetKey()) + 1;
+  integer currentLinkNumber = 1;
   list params= llGetLinkPrimitiveParams(LINK_THIS, [PRIM_DESC]);
   string desc = (string) params[0];
   displays = [];
   base = roller = -1;
   while(currentLinkNumber <= objectPrimCount) {
-    list params = llGetLinkPrimitiveParams(currentLinkNumber, [PRIM_NAME]);
     if (avi != NULL_KEY && avi == llGetLinkKey(currentLinkNumber)) {
       link_num = currentLinkNumber;
     } else {
+      list params = llGetLinkPrimitiveParams(currentLinkNumber, [PRIM_NAME]);
       switch ((string) params[0]) {
       case "[SPS] Treadmill": {
 	base = currentLinkNumber;
@@ -183,10 +183,13 @@ default {
     llMessageLinked(LINK_THIS,0, llGetDisplayName(avi), "fw_data:Label");
     vector size = llGetAgentSize(avi);
     fAdjust = ((((0.008906 * size.z) + -0.049831) * size.z) + 0.088967) * size.z;
-    integer linkNum = llGetNumberOfPrims();
     link_num = -1;
     setLinks(avi);
-    if (link_num == -1) llSay(0,"Can't find avatar.");
+    if (link_num == -1) {
+      llSay(0,"Can't find avatar.");
+      llUnSit(avi);
+      return;
+    }
     llMessageLinked(LINK_THIS, disallowTrainer, (string) avi, avi);
     llTakeControls(CONTROL_UP | CONTROL_DOWN | CONTROL_LEFT | CONTROL_RIGHT | CONTROL_FWD | CONTROL_BACK, TRUE, FALSE);
     checkUpdateSitTarget(target, target_rot);
