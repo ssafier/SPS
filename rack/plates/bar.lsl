@@ -118,41 +118,36 @@ default {
   
   attach(key id) {
     if (id) {
-// 1. Give the animation a moment to fully pose the avatar
-        llSleep(0.5); 
+      // 1. Give the animation a moment to pose the avatar
+      llSleep(0.5); 
 
-        // 2. Define the target center (using the 'origin' variable from bar.lsl)
-        vector target_center = origin; 
+      // 2. Get the avatar's bounding box size
+      vector agent_size = llGetAgentSize(id);
 
-        // 3. Get the avatar's root position and rotation
-        vector root_pos = llGetPos();
-        rotation root_rot = llGetRot();
+      // 3. agent_size.y is the avatar's width (shoulder to shoulder).
+      // We multiply this by your animation scale/tuning factor to get the slide distance.
+      // Note: You may need to make animation_scale negative depending on which hand 
+      // the bar is attached to, to slide it towards the body center.
+      float slide_distance = agent_size.y * animation_scale;
 
-        // 4. Get the bar's local offset and rotation relative to the hand
-        vector local_pos = llGetLocalPos();
-        rotation local_rot = llGetLocalRot();
+      // 4. Enforce the 90-degree Y rotation so it lays horizontally across the hands
+      rotation bar_local_rot = llEuler2Rot(<0.0, 90.0, 0.0> * DEG_TO_RAD);
 
-        // 5. Reconstruct the TRUE world position and rotation of the bar
-	rotation new_local_rot = llEuler2Rot(<0.0, -90.0, 0.0> * DEG_TO_RAD);
-	vector bar_world_pos = root_pos + (local_pos * root_rot);
-        rotation bar_world_rot = new_local_rot * root_rot;
+      // 5. Because the bar is rotated 90 degrees around Y, its local Z-axis now points
+      // left/right relative to the avatar's body. We map the slide distance to that Z-axis.
+      vector slide_vector = <0.0, 0.0, slide_distance> * bar_local_rot;
 
-        // 6. Calculate the world difference vector
-        vector diff = target_center - bar_world_pos;
+      // 6. Start from a pure zero baseline so it never compounds across multiple sets
+      vector base_grip_offset = ZERO_VECTOR; 
+      vector final_local_pos = base_grip_offset + slide_vector; 
 
-        // 7. Get the world-space direction of the bar's Z-axis (its shaft)
-        vector bar_shaft_axis = <0.0, 0.0, 1.0> * bar_world_rot;
+      // 7. Apply! 
+      llSetLinkPrimitiveParamsFast(LINK_ROOT, [
+					       PRIM_POS_LOCAL, final_local_pos, 
+					       PRIM_ROT_LOCAL, bar_local_rot
+					       ]);
 
-        // 8. Dot product: How far to slide along the bar's shaft to center it
-        float slide_distance = diff * bar_shaft_axis * animation_scale;
-
-        // 9. Apply the correction strictly to the local Z-axis
-	vector slide_vector = <0.0, 0.0, slide_distance> * new_local_rot;
-        local_pos -= slide_vector;
-
-        llSetLinkPrimitiveParamsFast(LINK_ROOT,
-				     [PRIM_POS_LOCAL, local_pos,
-				      PRIM_ROT_LOCAL, new_local_rot]);
+      // Make sure the plates are where they should be
       integer i;
       integer count = llGetListLength(data);
       
@@ -166,9 +161,12 @@ default {
 	llSetLinkPrimitiveParamsFast(linkNum,
 				     [PRIM_POS_LOCAL, localPos,
 				      PRIM_ROT_LOCAL, localRot,
-				      PRIM_SIZE, size]);
+				      PRIM_SIZE, size,
+				      PRIM_ALPHA_MODE, ALL_SIDES, PRIM_ALPHA_MODE_NONE, 0
+				      ]);
       }
-      llSetLinkPrimitiveParamsFast(LINK_SET, [PRIM_ALPHA_MODE, ALL_SIDES, PRIM_ALPHA_MODE_NONE, 0]);
+      llSetLinkPrimitiveParamsFast(LINK_THIS,
+				   [PRIM_ALPHA_MODE, ALL_SIDES, PRIM_ALPHA_MODE_NONE, 0]);
       llSay(channel,"attached");
     }
   }
