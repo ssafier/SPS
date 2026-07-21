@@ -65,8 +65,8 @@ default {
     integer index = llSubStringIndex(msg,"|");
     flags = (integer) llGetSubString(msg,0, index-1);
     animation = llGetSubString(msg,index+1,-1);
-    animate(xyzzy);
     if (xyzzy == current_avatar) {
+      animate(xyzzy); // this was outside...
     } else {
       debug("here "+(string)xyzzy);
       llRequestExperiencePermissions(xyzzy, "");

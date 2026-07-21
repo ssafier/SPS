@@ -30,7 +30,7 @@ default {
   http_response(key r, integer status, list meta, string body) {
     if (r != request) return;
     debug((string) status + body);
-    if (status != 200) {
+    if (status != 200 || llJsonValueType(body, []) != JSON_OBJECT) {
       PUSH(status);
       PUSH("server");
       return;
