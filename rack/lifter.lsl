@@ -359,10 +359,17 @@ state resting {
 	chan != ReStand &&
 	chan != checkWorkoutFail &&
 	chan != initializeLifter &&
+	chan != initiateStand &&
 	chan != Rested) return;
     GET_CONTROL;
     string popper;
     switch(chan) {
+    case initiateStand: {
+      llMessageLinked(LINK_THIS, animateWithSpotter,
+		      "|" + animation+"-STAND" + "|" + (string)(afStopAll | afCache),
+		      lifter);
+      break;
+    }
     case Rested: {
       llSetTimerEvent(0);
       break;
