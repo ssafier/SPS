@@ -873,6 +873,7 @@ class Sps extends BaseController
         $total = ($interval->days * 24 + $interval->h + ($interval->m / 60.0));
         $player->flex -= 0.05 * ($total / 24);
         if ($player->flex < 0.05) $player->flex = 0.05;
+        if ($player->flex > 1) $player->flex = 1;
         return $player;
     }
 
